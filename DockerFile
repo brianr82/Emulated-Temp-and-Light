@@ -10,5 +10,5 @@ WORKDIR /sensorsim
 ADD . /sensorsim
 
 # Run app.py when the container launches
-RUN ./sim_start
+RUN ./SensorSim
 
