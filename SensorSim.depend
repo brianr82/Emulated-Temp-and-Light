@@ -1,0 +1,62 @@
+# depslib dependency file v1.0
+1497552961 source:/home/brianr/Sensor/SensorSim/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<unistd.h>
+	<string.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<netdb.h>
+
+1497002261 /home/brianr/libc2/curl-7.54.1/include/curl/curl.h
+	"curlver.h"
+	"system.h"
+	"curlbuild.h"
+	"curlrules.h"
+	<stdio.h>
+	<limits.h>
+	<osreldate.h>
+	<sys/types.h>
+	<time.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/select.h>
+	<sys/socket.h>
+	<sys/time.h>
+	<support/SupportDefs.h>
+	"easy.h"
+	"multi.h"
+	"typecheck-gcc.h"
+
+1497420787 /home/brianr/libc2/curl-7.54.1/include/curl/curlver.h
+
+1495436727 /home/brianr/libc2/curl-7.54.1/include/curl/system.h
+	<windows.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+
+1497420787 /home/brianr/libc2/curl-7.54.1/include/curl/curlbuild.h
+	<sys/types.h>
+	<sys/socket.h>
+
+1495436727 /home/brianr/libc2/curl-7.54.1/include/curl/curlrules.h
+
+1484301320 /home/brianr/libc2/curl-7.54.1/include/curl/easy.h
+
+1493761324 /home/brianr/libc2/curl-7.54.1/include/curl/multi.h
+	"curl.h"
+
+1497002261 /home/brianr/libc2/curl-7.54.1/include/curl/typecheck-gcc.h
+
+1497537884 source:/home/brianr/Sensor/SensorSim/main2.c
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<string.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<netdb.h>
+
