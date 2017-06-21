@@ -24,7 +24,7 @@ int getLux();
 SensorReading *gen_reading(int *min_temp, int *max_temp, int *min_lux, int *max_lux);
 void printSensorReading(SensorReading *readingToPrint);
 //void sendMsg();
-void sendMsg(int temperature, int lux);
+void sendMsg(int temperature, int lux, char* destination_ip_address, int destination_portNumber);
 void error(const char *msg) { perror(msg); exit(0); }
 
 
@@ -34,15 +34,47 @@ void error(const char *msg) { perror(msg); exit(0); }
 MAIN PROGRAM
 *************************************************************************/
 
-int main()
+int main(int argc, char *argv[])
 {
+
+    if ( argc != 4 ) /* argc should be 2 for correct execution */
+        {
+        printf("Wrong number of arguments\n");
+        exit(0);
+
+    }
+
+
+
     /******************
     Seed the randomiser
     *******************/
 
+    char* destination_ip_address  = argv[1];
+
+
+    int *destination_portNumber = (int *)malloc(sizeof(int));
+    *destination_portNumber = atoi(argv[2]);
+
+    int *messages_to_send = (int *)malloc(sizeof(int));
+    *messages_to_send = atoi(argv[3]);
+
+
+    printf("%s",destination_ip_address);
+    printf("\n%i",*destination_portNumber);
+    printf("\n%i",*messages_to_send);
+
+
+
+    printf("\n%s",argv[1]);
+    printf("\n%s",argv[2]);
+    printf("\n%s",argv[3]);
+
+
+
     seedRandom();
 
-    printf("Sensor Data Sim!\n");
+    printf("\nSensor Data Sim!\n");
 
 
 
@@ -57,7 +89,6 @@ int main()
 
     int *max_lux = (int *)malloc(sizeof(int));
     *max_lux = 200;
-
 
 /*
     SensorReading *read1 =  gen_reading(min_temp,max_temp,min_lux,max_lux);
@@ -78,14 +109,13 @@ int main()
 
 
 
-
     int x = 0;
-    while(x< 20){
+    while(x< *messages_to_send){
 
         SensorReading *read_temp =  gen_reading(min_temp,max_temp,min_lux,max_lux);
-        sendMsg(read_temp->temperature,read_temp->lux);
+        sendMsg(read_temp->temperature,read_temp->lux,destination_ip_address, *destination_portNumber);
         printSensorReading(read_temp);
-        printf("\n*******Message ID: %i",x);
+        printf("\n*******Message ID: %i\n",x);
         x++;
         free(read_temp);
         sleep(1);
@@ -107,8 +137,8 @@ int main()
     free(min_lux);
     free(max_lux);
 
-    //free(read1);
-    //free(read2);
+    free(messages_to_send);
+    free(destination_portNumber);
 
     return 0;
 
@@ -173,11 +203,12 @@ void printSensorReading(SensorReading *readingToPrint){
 }
 
 
-void sendMsg(int temperature, int lux){
+void sendMsg(int temperature, int lux, char* destination_ip_address, int destination_portNumber){
 
   /* first what are we going to send and where are we going to send it? */
-    int portno =        1880;
-    char *host =        "192.168.2.138";
+    int portno =  destination_portNumber;
+    //char *host =        "192.168.2.138";
+    char *host =        destination_ip_address;
     char *message_fmt = "POST /readings-form/?temp=%i&lux=%i HTTP/1.0\r\n\r\n";
 
     struct hostent *server;
