@@ -24,7 +24,7 @@ int getLux();
 SensorReading *gen_reading(int *min_temp, int *max_temp, int *min_lux, int *max_lux);
 void printSensorReading(SensorReading *readingToPrint);
 //void sendMsg();
-void sendMsg(int temperature, int lux, char* destination_ip_address, int destination_portNumber);
+void sendMsg(int temperature, int lux, char* destination_ip_address, int destination_portNumber, char* sensor_id);
 void error(const char *msg) { perror(msg); exit(0); }
 
 
@@ -37,7 +37,7 @@ MAIN PROGRAM
 int main(int argc, char *argv[])
 {
 
-    if ( argc != 4 ) /* argc should be 2 for correct execution */
+    if ( argc != 5 ) /* argc should be 2 for correct execution */
         {
         printf("Wrong number of arguments\n");
         exit(0);
@@ -60,9 +60,14 @@ int main(int argc, char *argv[])
     *messages_to_send = atoi(argv[3]);
 
 
-    printf("%s",destination_ip_address);
+    char* input_sensor_id  = argv[4];
+
+
+    printf("\n%s",destination_ip_address);
+    printf("\n%s",input_sensor_id);
     printf("\n%i",*destination_portNumber);
     printf("\n%i",*messages_to_send);
+    printf("%lu\n", (unsigned long)time(NULL));
 
 
 
@@ -113,7 +118,7 @@ int main(int argc, char *argv[])
     while(x< *messages_to_send){
 
         SensorReading *read_temp =  gen_reading(min_temp,max_temp,min_lux,max_lux);
-        sendMsg(read_temp->temperature,read_temp->lux,destination_ip_address, *destination_portNumber);
+        sendMsg(read_temp->temperature,read_temp->lux,destination_ip_address, *destination_portNumber, input_sensor_id);
         printSensorReading(read_temp);
         printf("\n*******Message ID: %i\n",x);
         x++;
@@ -203,13 +208,32 @@ void printSensorReading(SensorReading *readingToPrint){
 }
 
 
-void sendMsg(int temperature, int lux, char* destination_ip_address, int destination_portNumber){
+void sendMsg(int temperature, int lux, char* destination_ip_address, int destination_portNumber,char* input_sensor_id){
 
   /* first what are we going to send and where are we going to send it? */
     int portno =  destination_portNumber;
-    //char *host =        "192.168.2.138";
     char *host =        destination_ip_address;
-    char *message_fmt = "POST /readings-form/?temp=%i&lux=%i HTTP/1.0\r\n\r\n";
+    char *message_fmt = "POST /readings-form/?temp=%i&lux=%i&id=%s&timestamp=%lu&daydate=%s HTTP/1.0\r\n\r\n";
+    char *temp_sensor_id = input_sensor_id;
+    unsigned long unix_timestamp = (unsigned long)time(NULL);
+
+
+    //create day date data
+
+ /*********************/
+    time_t rawtime;
+   struct tm *info;
+   char daydate_buffer[80];
+
+   time( &rawtime );
+
+   info = localtime( &rawtime );
+
+   strftime(daydate_buffer,80,"%Y%m%d", info);
+   printf("Formatted date & time:%s\n", daydate_buffer );
+
+/***************************************/
+
 
     struct hostent *server;
     struct sockaddr_in serv_addr;
@@ -218,7 +242,7 @@ void sendMsg(int temperature, int lux, char* destination_ip_address, int destina
 
 
     /* fill in the parameters */
-    sprintf(message,message_fmt,temperature,lux);
+    sprintf(message,message_fmt,temperature,lux,temp_sensor_id,unix_timestamp,daydate_buffer);
     printf("Request:\n%s\n",message);
 
     /* create the socket */
