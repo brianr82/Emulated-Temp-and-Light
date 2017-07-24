@@ -61,6 +61,9 @@ int main(int argc, char *argv[])
 
 
     char* input_sensor_id  = argv[4];
+    
+    int *sensor_send_delay = (int *)malloc(sizeof(int));
+    *sensor_send_delay = atoi(argv[5]);
 
 
     printf("\n%s",destination_ip_address);
@@ -123,7 +126,7 @@ int main(int argc, char *argv[])
         printf("\n*******Message ID: %i\n",x);
         x++;
         free(read_temp);
-        sleep(1);
+        sleep(sensor_send_delay);
 
 
     }
@@ -143,6 +146,7 @@ int main(int argc, char *argv[])
     free(max_lux);
 
     free(messages_to_send);
+    free(sensor_send_delay);
     free(destination_portNumber);
 
     return 0;
