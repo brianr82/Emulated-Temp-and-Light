@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
         printf("\n*******Message ID: %i\n",x);
         x++;
         free(read_temp);
-        sleep(sensor_send_delay);
+        sleep(*sensor_send_delay);
 
 
     }
