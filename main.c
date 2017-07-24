@@ -37,7 +37,7 @@ MAIN PROGRAM
 int main(int argc, char *argv[])
 {
 
-    if ( argc != 5 ) /* argc should be 2 for correct execution */
+    if ( argc != 6 ) /* argc should be 2 for correct execution */
         {
         printf("Wrong number of arguments\n");
         exit(0);
